@@ -54,6 +54,12 @@ def generalize_output(lst):
     new_lst = [regex.sub("", line) for line in lst]
     return new_lst
 
+def validate_dirs(dir):
+    for key, value in dir.items():
+        if not os.path.exists(value):
+            print('Creating directory:', value)
+            os.makedirs(value)
+
 
 def load_solutions(sol_dir):
     return [generalize_output([line.upper().strip() for line in open(f'./{sol_dir}/{sol}', 'r')]) for sol in os.listdir(sol_dir)]

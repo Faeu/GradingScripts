@@ -8,13 +8,13 @@ import time
 def run_script(python_file, output_only):
     out_stream = subprocess.PIPE if output_only else None
     if len(tests) < 1:
-        print(get_result(f'python3 "./{sub_dir}/{python_file}"', None, out_stream))
+        print(get_result(f'python3 "./{dir['sub']}/{python_file}"', None, out_stream))
     else:
         for i, test in enumerate(tests):
             try:
                 print("TEST", i+1)
                 print(">>>>>>>>>>>> LAB OUTPUT <<<<<<<<<<<<")
-                answer = get_result(f'python3 "./{sub_dir}/{python_file}"', test, out_stream)
+                answer = get_result(f'python3 "./{dir['sub']}/{python_file}"', test, out_stream)
                 print(">>>>>>>>>> END LAB OUTPUT <<<<<<<<<<")
                 print("========= EXPECTED OUTPUT =========")
                 print(solutions_r[i])
@@ -53,17 +53,21 @@ def load_solutions(sol_dir):
 def load_readable_solutions(sol_dir):
     return [open(f'./{sol_dir}/{sol}', 'r').read() for sol in os.listdir(sol_dir)]
 
-def load_tests(test_dir):
-    return ["".join([line for line in open(f'./{test_dir}/{test}', 'r')]) for test in os.listdir(test_dir)]
+def load_tests(dir['test']):
+    return ["".join([line for line in open(f'./{dir['test']}/{test}', 'r')]) for test in os.listdir(dir['test'])]
 
 
-test_dir = 'tests'
-sol_dir = 'solutions'
-sub_dir = 'submissions'
+dir = {
+    'test' : 'tests',
+    'sol' : 'solutions',
+    'sub' : 'submissions',
+    'cor' : 'correct_submissions'
+}
+validate_dirs(dir)
 point_weight = 4
-solutions = load_solutions(sol_dir)
-tests = load_tests(test_dir)
-solutions_r = load_readable_solutions(sol_dir)
+solutions = load_solutions(dir['sol'])
+tests = load_tests(dir['test'])
+solutions_r = load_readable_solutions(dir['sol'])
 output_only = False
 verbose = True
 
@@ -76,7 +80,7 @@ for test in tests:
 with open('results.csv', 'w', newline='') as csvfile:
     csvwriter = csv.writer(csvfile)
     csvwriter.writerow(['ID', 'Grade', 'Comments'])
-    sub_list = os.listdir(f'./{sub_dir}')
+    sub_list = os.listdir(f'./{dir['sub']}')
     sub_list.sort()
 
     for lab in sub_list:

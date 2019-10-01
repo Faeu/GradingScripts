@@ -7,13 +7,17 @@ import time
 from grading_module import *
 
 
-test_dir = 'tests'
-sol_dir = 'solutions'
-sub_dir = 'submissions'
+dir = {
+    'test' : 'tests',
+    'sol' : 'solutions',
+    'sub' : 'submissions',
+    'cor' : 'correct_submissions'
+}
+validate_dirs(dir)
 point_weight = 4
-solutions = load_solutions(sol_dir)
-tests = load_tests(test_dir)
-verbose = load_readable_solutions(sol_dir)
+solutions = load_solutions(dir['sol'])
+tests = load_tests(dir['test'])
+verbose = load_readable_solutions(dir['sol'])
 output_only = False
 
 print_tests(solutions, tests)
@@ -22,7 +26,7 @@ with open('results.csv', 'w', newline='') as csvfile:
     csvwriter = csv.writer(csvfile)
     csvwriter.writerow(['ID', 'Grade', 'Comments'])
 
-    for lab in os.listdir(f'./{sub_dir}'):
+    for lab in os.listdir(f'./{dir['sub']}'):
         file_info = lab.split('_')
         id = file_info[1] if 'late' not in file_info[1] else file_info[2]
         if 'late' in file_info[1]:
@@ -32,7 +36,7 @@ with open('results.csv', 'w', newline='') as csvfile:
         print('###################################### NEW LAB ########################################')
         print(f'Here is {file_info[0]}\'s lab:')
         try:
-            grade_script(lab, sub_dir, tests, solutions, output_only, verbose)
+            grade_script(lab, dir['sub'], tests, solutions, output_only, verbose)
             time.sleep(.5);
             temp_grade = input('Grade> ')
             if temp_grade.lower() == 's' or temp_grade == '': # Create list of skipped?
