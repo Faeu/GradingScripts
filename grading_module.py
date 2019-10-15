@@ -40,7 +40,7 @@ def get_result(file_name, output_only, test_case=None):
     return r_sout
 
 def extract_output(stream):
-    stream = stream.upper()
+    stream = stream.upper() + '\n'
     output = []
     while 'OUTPUT' in stream:
         s_index = stream.find('OUTPUT')

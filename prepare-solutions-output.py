@@ -9,7 +9,7 @@ def prepare(python_file, test_dir='tests', sol_dir='solutions'):
      for test in os.listdir(test_dir):
         out = open(f'./{sol_dir}/{test}', 'w')
         test_case = open(f'./{test_dir}/{test}', 'r')
-        result = subprocess.Popen(f'python {python_file}', stdin=test_case, stdout=subprocess.PIPE, text=True)
+        result = subprocess.Popen(f'py {python_file}', stdin=test_case, stdout=subprocess.PIPE, text=True)
         extract_output(out, result.stdout)
         out.close()
 

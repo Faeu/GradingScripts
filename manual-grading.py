@@ -26,7 +26,7 @@ with open('results.csv', 'w', newline='') as csvfile:
     csvwriter = csv.writer(csvfile)
     csvwriter.writerow(['ID', 'Grade', 'Comments'])
 
-    for lab in os.listdir(f'./{dir['sub']}'):
+    for lab in os.listdir(f"./{dir['sub']}"):
         file_info = lab.split('_')
         id = file_info[1] if 'late' not in file_info[1] else file_info[2]
         if 'late' in file_info[1]:
