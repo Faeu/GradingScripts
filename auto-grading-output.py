@@ -17,6 +17,8 @@ tests = load_tests(dir['test'])
 output_only = True
 verbose = False
 num_correct = 0
+colorama.init()
+print(Style.BRIGHT)
 
 print_tests(solutions, tests)
 
