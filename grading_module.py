@@ -3,6 +3,8 @@ import importlib
 import subprocess
 import sys
 import re
+import colorama
+from colorama import Fore, Back, Style
 
 
 def grade_script(python_file, sub_dir, tests, solutions, output_only, verbose=None):
@@ -12,13 +14,13 @@ def grade_script(python_file, sub_dir, tests, solutions, output_only, verbose=No
         try:
             answer = get_result(f'python "./{sub_dir}/{python_file}"', output_only, test)
             if verbose:
-                print("TEST", i+1)
-                print(">>>>>>>>>>>> LAB OUTPUT <<<<<<<<<<<<")
+                print(Fore.RED, "TEST ", i+1, Fore.WHITE, sep='')
+                print(">>>>>>>>>>>> LAB OUTPUT <<<<<<<<<<<<", Fore.GREEN, sep='')
                 print(answer)
-                print(">>>>>>>>>> END LAB OUTPUT <<<<<<<<<<")
-                print("========= EXPECTED OUTPUT =========")
+                print(Fore.WHITE, ">>>>>>>>>> END LAB OUTPUT <<<<<<<<<<", sep='')
+                print("========= EXPECTED OUTPUT =========", Fore.CYAN, sep='')
                 print(verbose[i])
-                print("======= END EXPECTED OUTPUT =======\n")
+                print(Fore.WHITE, "======= END EXPECTED OUTPUT =======\n", sep='')
                 continue
         except Exception as e:
             print(repr(e))
@@ -72,8 +74,9 @@ def load_tests(test_dir):
 
 def print_tests(solutions, tests):
     for i, sol in enumerate(solutions):
-        print(f'Test{1}', tests[i])
-        print(f'Solution{1}', sol)
+        print(Fore.RED, f'Test{i} ', tests[i].strip(), sep='')
+        print(Fore.BLUE, f'Solution{i} ', sol, sep='')
+        print()
 
 def check_answer(answer, solution):
     if len(answer) < len(solution):
@@ -81,7 +84,7 @@ def check_answer(answer, solution):
     for i, sol in enumerate(solution):
         if sol != answer[i]:
             print('failure')
-            print('### Expected:', sol)
-            print('### Received:', answer[i])
+            print(Fore.GREEN, '### Expected: ', sol, sep='')
+            print(Fore.RED, '### Received: ', answer[i], Fore.WHITE, sep='')
             return 0
     return 1

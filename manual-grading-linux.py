@@ -17,7 +17,7 @@ def run_script(python_file, output_only):
                 print(Fore.RED, "TEST ", i+1, Fore.WHITE, sep='')
                 print(">>>>>>>>>>>> LAB OUTPUT <<<<<<<<<<<<", Fore.GREEN, sep='')
                 answer = get_result(f"python3 \"./{dir['sub']}/{python_file}\"", test, out_stream)
-                print(Fore.WHITE, ">>>>>>>>>> END LAB OUTPUT <<<<<<<<<<")
+                print(Fore.WHITE, ">>>>>>>>>> END LAB OUTPUT <<<<<<<<<<", sep='')
                 print("========= EXPECTED OUTPUT =========", Fore.CYAN, sep='')
                 print(solutions_r[i])
                 print(Fore.WHITE, "======= END EXPECTED OUTPUT =======\n", sep='')
@@ -62,7 +62,7 @@ def load_tests(test_dir):
 dir = {
     'test' : 'tests',
     'sol' : 'solutions',
-    'sub' : 'submissions',
+    'sub' : 'submissions1',
     'cor' : 'correct_submissions'
 }
 point_weight = 4

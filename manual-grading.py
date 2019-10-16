@@ -19,8 +19,11 @@ solutions = load_solutions(dir['sol'])
 tests = load_tests(dir['test'])
 verbose = load_readable_solutions(dir['sol'])
 output_only = False
+colorama.init()
+print(Style.BRIGHT)
 
 print_tests(solutions, tests)
+print(Fore.WHITE)
 
 with open('results.csv', 'w', newline='') as csvfile:
     csvwriter = csv.writer(csvfile)
@@ -33,8 +36,8 @@ with open('results.csv', 'w', newline='') as csvfile:
             print('----------LATE LAB----------')
         if '.py' not in lab:
             continue
-        print('###################################### NEW LAB ########################################')
-        print(f'Here is {file_info[0]}\'s lab:')
+        print(Fore.GREEN, '###################################### NEW LAB ########################################', Fore.WHITE, sep='')
+        print(Style.NORMAL, Back.WHITE, Fore.BLACK, f'{file_info[0]}\'s lab:', Back.RESET, Style.BRIGHT, '\n', sep='')
         try:
             grade_script(lab, dir['sub'], tests, solutions, output_only, verbose)
             time.sleep(.5);
