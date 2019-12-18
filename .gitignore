@@ -1,2 +1,10 @@
 # Ignoring junk
 __pycache__/
+# Submissions
+*submissions/
+# Submission Outputs
+outputs/
+# Zips
+*.zip
+# Output/IDs
+results.csv

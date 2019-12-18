@@ -1,0 +1,6 @@
+clean_word("What-Ch'aDo$c")
+clean_word("Simple%String")
+read_file("./inputs/sample.txt")
+read_file("./inputs/sample1.txt")
+write_file(words, output_file[0], 25, 243)
+write_file(words, output_file[1], 30, 943)

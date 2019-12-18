@@ -31,11 +31,11 @@ with open('results.csv', 'w', newline='') as csvfile:
 
     for lab in os.listdir(f"./{dir['sub']}"):
         file_info = lab.split('_')
+        if len(file_info) < 2 or '.py' not in lab:
+            continue
         id = file_info[1] if 'late' not in file_info[1] else file_info[2]
         if 'late' in file_info[1]:
             print('----------LATE LAB----------')
-        if '.py' not in lab:
-            continue
         print(Fore.GREEN, '###################################### NEW LAB ########################################', Fore.WHITE, sep='')
         print(Style.NORMAL, Back.WHITE, Fore.BLACK, f'{file_info[0]}\'s lab:', Back.RESET, Style.BRIGHT, '\n', sep='')
         try:

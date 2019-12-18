@@ -3,10 +3,10 @@ import os
 import csv
 import shutil
 import yaml
-from grading_module import *
-import base_config
+from grading_module import *  
 
-with open("base_config.yml", 'r') as ymlfile:
+
+with open("base_config.yaml", 'r') as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
 
 dir = cfg['dir']
@@ -17,14 +17,18 @@ modify = cfg['modify'] # 1 is a function  2 is modify tests for output test  any
 temp_point = input('Points> ')
 if temp_point != '':
   cfg['point_weight'] = int(temp_point)
-  with open('base_config.yml', 'w') as outfile:
+  with open('base_config.yaml', 'w') as outfile:
     yaml.dump(cfg, outfile)
 point_weight = cfg['point_weight']
 
+
 validate_dirs(dir)
-solutions = load_solutions(dir['sol'])
-tests = load_tests(dir['test'])
+solutions = load_f_solutions(dir['sol']) if not output_only else load_solutions(dir['sol'])
+tests = load_f_tests(dir['test']) if modify == 1 else load_tests(dir['test'])
+file_sol = load_solutions(dir['sol_out']) if check_file else []
+verbose = False
 num_correct = 0
+sys.path.insert(1, f"./{dir['sub']}")
 colorama.init()
 print(Style.BRIGHT)
 
@@ -33,15 +37,16 @@ print_tests(solutions, tests)
 with open('results.csv', 'w', newline='') as csvfile:
     csvwriter = csv.writer(csvfile)
     csvwriter.writerow(['ID', 'Grade'])
-
     for lab in os.listdir(f"./{dir['sub']}"):
         file_info = lab.split('_')
         if '.py' not in lab:
             continue
         id = file_info[1] if 'LATE' not in file_info[1] else file_info[2] # print if late
         print(Fore.WHITE, f'Here is {file_info[0]}\'s lab:', sep='')
-        grade = grade_script(lab, dir['sub'], tests, solutions, output_only, modify= )
-        if grade == 1:
+        grade = grade_script(lab, dir['sub'], tests, solutions, output_only, modify=modify, methods=methods)
+        if check_file:
+            file_grade = file_check(file_info[0], id, file_sol, verbose)
+        if grade == 1 and file_grade == 1:
             print('success')
             num_correct += 1
             csvwriter.writerow([id, point_weight])

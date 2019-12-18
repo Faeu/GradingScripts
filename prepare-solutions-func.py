@@ -3,31 +3,39 @@ import os
 import importlib
 import subprocess
 import sys
-import csv
+from grading_module import *
 
-def prepare(python_file, test_dir, sol_dir):
-     for test in os.listdir(test_dir):
-        lst = loadcsv(f'./{test_dir}/{test}')
-        try:
-            script = import_method(python_file, method_name)
-            answer = script(lst[:-1], lst[-1])
-            with open(f'./{sol_dir}/{test}', 'w') as f:
-                f.write(str(answer))
-        except Exception as e:
-            print(repr(e))
+def prepare(python_file, tests, sol_dir, output_only=None):
+    module = import_method(python_file, method_name)
+    env = load_environment(module)
+    env['module'] = module
+    with open(f'./{sol_dir}/solution', 'w') as output_file:
+        output_file.write("type:res\n")
+        for test in tests:
+            try:
+                f = io.StringIO()
+                obj_type = 'str'
+                print(test)
+                with contextlib.redirect_stdout(f):
+                    answer = eval(f'module.{test}', {'__builtins__': None}, env)
+                    print(answer)
+                    obj_type = type(answer).__name__
+                if output_only:
+                    answer = f.getvalue()
+                output_file.write(f"{obj_type}:{str(answer)}\n")
+            except Exception as e:
+                print(repr(e))
 
-def loadcsv(path):
-    with open(path) as csvfile:
-            csvreader = csv.reader(csvfile, delimiter=',', quoting=csv.QUOTE_NONNUMERIC)
-            lst = []
-            for row in csvreader:
-                lst.extend(map(int,row))
-            return lst
+dir = {
+    'test' : 'tests',
+    'sol' : 'solutions',
+    'sub' : 'submissions',
+    'cor' : 'correct_submissions'
+}
+tests = load_f_tests(dir['test'])
+print(tests)
+method_name = ['clean_words', 'read_file', 'write_file']
+python_file = sys.argv[1]
+output_only = False
 
-def import_method(file_name, method):
-    module = importlib.__import__(file_name[:-3].strip('.\\'), fromlist=[method])
-    return getattr(module, method)
-
-
-method_name = 'recursive_sum_odd'
-prepare(sys.argv[1], sys.argv[2], sys.argv[3])
+prepare(python_file, tests, dir['sol'])

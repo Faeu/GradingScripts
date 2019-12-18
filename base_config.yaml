@@ -1,0 +1,17 @@
+check_file: true
+dir:
+  cor: correct_submissions
+  out: outputs
+  sol: solutions
+  sol_out: sol_output
+  sub: submissions
+  grad: graded_submissions
+  test: tests
+editor: atom
+methods:
+- clean_words
+- read_file
+- write_file
+modify: 1
+output_only: false
+point_weight: 5

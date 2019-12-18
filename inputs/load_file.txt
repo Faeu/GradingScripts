@@ -1,0 +1,4 @@
+['words', 'output_file']
+['read_file']
+read_file('inputs/sample.txt')
+[f'outputs/{name}_{id}_output_file_0.txt', f'outputs/{name}_{id}_output_file_1.txt']

@@ -83,4 +83,3 @@ with open('results.csv', 'w', newline='') as csvfile:
             print('Review:', lab)
         print()
         # input()
-
