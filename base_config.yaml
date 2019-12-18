@@ -1,12 +1,12 @@
 check_file: true
 dir:
   cor: correct_submissions
-  out: outputs
-  sol: solutions
-  sol_out: sol_output
-  sub: submissions
   grad: graded_submissions
+  sub: submissions
+  out: outputs
+  sol_out: sol_output
   test: tests
+  sol: solutions
 editor: atom
 methods:
 - clean_words
@@ -14,4 +14,5 @@ methods:
 - write_file
 modify: 1
 output_only: false
-point_weight: 5
+point_weight: 3
+solution_script: Week11-random_file.py

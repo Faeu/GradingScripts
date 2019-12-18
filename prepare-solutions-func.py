@@ -35,6 +35,10 @@ dir = cfg['dir']
 methods = cfg['methods']
 output_only = cfg['output_only']
 tests = load_f_tests(dir['test'])
-python_file = sys.argv[1]
+python_file = sys.argv[1][2:]
+cfg['solution_script'] = python_file
+
+with open('base_config.yaml', 'w') as outfile:
+    yaml.dump(cfg, outfile)
 
 prepare(python_file, tests, dir['sol'])
