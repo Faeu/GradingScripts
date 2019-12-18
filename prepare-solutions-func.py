@@ -3,10 +3,11 @@ import os
 import importlib
 import subprocess
 import sys
+import yaml
 from grading_module import *
 
 def prepare(python_file, tests, sol_dir, output_only=None):
-    module = import_method(python_file, method_name)
+    module = import_method(python_file, methods)
     env = load_environment(module)
     env['module'] = module
     with open(f'./{sol_dir}/solution', 'w') as output_file:
@@ -26,16 +27,14 @@ def prepare(python_file, tests, sol_dir, output_only=None):
             except Exception as e:
                 print(repr(e))
 
-dir = {
-    'test' : 'tests',
-    'sol' : 'solutions',
-    'sub' : 'submissions',
-    'cor' : 'correct_submissions'
-}
+
+with open("base_config.yaml", 'r') as ymlfile:
+    cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
+
+dir = cfg['dir']
+methods = cfg['methods']
+output_only = cfg['output_only']
 tests = load_f_tests(dir['test'])
-print(tests)
-method_name = ['clean_words', 'read_file', 'write_file']
 python_file = sys.argv[1]
-output_only = False
 
 prepare(python_file, tests, dir['sol'])
