@@ -9,7 +9,7 @@ from grading_module import load_methods, load_f_tests
 def prepare(python_file, tests, sol_dir, output_only=None):
     env = load_methods(python_file, methods, subm=False)
     with open(f'./{sol_dir}/solution', 'w') as output_file:
-        output_file.write(f"type{delimiter}res\n") # Change delimeter
+        output_file.write(f"type{delimiter}res\n")  # Change delimeter
         for test in tests:
             try:
                 f = io.StringIO()
@@ -33,7 +33,7 @@ dir = cfg['dir']
 methods = cfg['methods']
 output_only = cfg['output_only']
 tests = load_f_tests(dir['test'])
-python_file = sys.argv[1].replace(".\\", "") # Clipping off slash
+python_file = sys.argv[1].replace(".\\", "")  # Clipping off slash
 cfg['solution_script'] = python_file
 delimiter = '`'
 
