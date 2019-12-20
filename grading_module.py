@@ -21,7 +21,7 @@ def grade_script(python_file, sub_dir, tests, solutions, output_only, verbose=No
         trials += 1
         try:
             if modify == 1:
-              answer = func_result(test, env, output_only)
+              answer = func_result(test, env, output_only, verbose)
             else:
               if modify == 2:
                 test = modify_test(test, len(tests))
@@ -51,12 +51,14 @@ def get_result(file_name, output_only, test_case=None):
         return extract_output(result.stdout)
     return result.stdout
 
-def func_result(test, env, output_only):
+def func_result(test, env, output_only, verbose):
   f = io.StringIO()
   with contextlib.redirect_stdout(f):
       answer = [eval(f'module.{test}', {'__builtins__': None}, env)]
-  if output_only or answer[0] is None:
-      answer = [f.getvalue().strip()]
+  if output_only or (answer[0] is None and f.getvalue() != ""):
+      answer = [f.getvalue().strip()]#.replace("\n", " ")]
+      if not verbose:
+        answer = generalize_output(answer)
   return answer
 
 def extract_output(stream):
@@ -75,6 +77,9 @@ def generalize_output(lst):
     return new_lst
 
 def verbose_lab_output(res, exp, i):
+    if type(exp) == list and len(exp) == 1:
+      res = res[0]
+      exp = exp[0]
     print(Fore.RED, "TEST ", i, Fore.WHITE, sep='')
     print(">>>>>>>>>>>> LAB OUTPUT <<<<<<<<<<<<", Fore.GREEN, sep='')
     print(res)
@@ -163,18 +168,20 @@ def file_check(name, id, file_sol, verbose=False):
   return grade
 
 
-def load_f_solutions(sol_dir):
+def load_f_solutions(sol_dir, output_only=False):
     sol = []
     sol_file = os.listdir(sol_dir)[0]
     with open(f"./{sol_dir}/{sol_file}") as csvfile:
-        csvreader = csv.DictReader(csvfile, delimiter=':')
+        csvreader = csv.DictReader(csvfile, delimiter='`')
         for row in csvreader:
             if row['type'] == 'str':
                 sol.append([row['res']])
-            elif row['type'] == 'NoneType' or row['type'] == 'list':
+            elif row['type'] == 'NoneType' or row['type'] == 'list' or row['type'] == 'print':
                 sol.append([eval(row['res'], {}, {})])
             else:
                 sol.append( [ eval(f"{ row['type'] }( { row['res'] } )", {}, {}) ] )
+        if output_only:
+          sol = list(map(generalize_output, sol))
         return sol
 
 def check_files(solution, file_base):

@@ -23,7 +23,7 @@ point_weight = cfg['point_weight']
 
 
 validate_dirs(dir)
-solutions = load_f_solutions(dir['sol']) if not output_only else load_solutions(dir['sol'])
+solutions = load_f_solutions(dir['sol'], output_only=output_only) if modify == 1 else load_solutions(dir['sol'])
 tests = load_f_tests(dir['test']) if modify == 1 else load_tests(dir['test'])
 file_sol = load_solutions(dir['sol_out']) if check_file else []
 verbose = False
@@ -45,8 +45,8 @@ with open('results.csv', 'w', newline='') as csvfile:
         print(Fore.WHITE, f'Here is {file_info[0]}\'s lab:', sep='')
         grade = grade_script(lab, dir['sub'], tests, solutions, output_only, modify=modify, methods=methods)
         if check_file:
-            file_grade = file_check(file_info[0], id, file_sol, verbose)
-        if grade == 1 and file_grade == 1:
+            grade = (file_check(file_info[0], id, file_sol, verbose) + grade) /2
+        if grade == 1:
             print('success')
             num_correct += 1
             csvwriter.writerow([id, point_weight])
