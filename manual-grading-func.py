@@ -19,10 +19,15 @@ modify = cfg['modify']  # 1 is a function  2 is modify tests for output test  an
 editor = cfg['editor']
 
 gm.validate_dirs(dir)
-solutions = gm.load_f_solutions(dir['sol'])
-tests = gm.load_f_tests(dir['test'])
-file_sol = gm.load_solutions(dir['sol_out'])
-verbose = gm.load_f_solutions(dir['sol'])
+if modify == 1:
+    solutions = gm.load_f_solutions(dir['sol'])
+    tests = gm.load_f_tests(dir['test'])
+    file_sol = gm.load_solutions(dir['sol_out'])
+    verbose = gm.load_f_solutions(dir['sol'])
+else:
+    solutions = gm.load_solutions(dir['sol'])
+    tests = gm.load_tests(dir['test'])
+    verbose = gm.load_readable_solutions(dir['sol'])
 target_letter = ''
 sys.path.insert(1, f"./{dir['sub']}")
 

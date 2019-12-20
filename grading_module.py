@@ -13,8 +13,6 @@ def grade_script(python_file, sub_dir, tests, solutions, output_only, verbose=No
     succ = trials = 0
     answer = 0
     env = load_methods(python_file, methods, repeat=repeat)
-    if not env:
-        return -1
     for i, test in enumerate(tests):
         trials += 1
         try:
@@ -23,8 +21,9 @@ def grade_script(python_file, sub_dir, tests, solutions, output_only, verbose=No
             else:
                 if modify == 2:
                     test = modify_test(test, len(tests))
-                answer = get_result(f'py "./{sub_dir}/{python_file}"', output_only, test)
-                answer = generalize_output(answer)
+                answer = get_result(f'py "./{sub_dir}/{python_file}"', output_only, test, verbose)
+                if not verbose:
+                    answer = generalize_output(answer)
             if verbose:
                 if methods:
                     verbose_lab_output(answer, verbose[i], test)
@@ -41,12 +40,12 @@ def grade_script(python_file, sub_dir, tests, solutions, output_only, verbose=No
     return succ / trials
 
 
-def get_result(file_name, output_only, test_case=None):
+def get_result(file_name, output_only, test_case=None, verbose=False):
     try:
         result = subprocess.run(file_name, input=test_case, stdout=subprocess.PIPE, timeout=8, text=True)
     except subprocess.TimeoutExpired:
         return("Infinite loop or took too long.")
-    if output_only:
+    if output_only and not verbose:
         return extract_output(result.stdout)
     return result.stdout
 
